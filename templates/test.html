@@ -1,0 +1,103 @@
+<html lang = "en" dir = "ltr" >
+<head >
+    <meta charset = "utf-8">
+    <title > </title>
+</head>
+
+<body>
+    <input type="text"  name="c-id" id="c-id" >
+    <button type="button" name="button" id='stream-change' > Поток </button>
+    <button type="button" name="button" id='stream-stop' > Стоп! </button>
+    <button type="button" name="button" id='stream-stop-all' > Стоп все </button>
+    <button type="button" name="button" id='ffserver-reload' > Перезагрузка FFSERVER </button>
+
+
+
+
+    <br>
+    <div id='video-content'>
+        <img src='' width='640' height='480' id='video-id'></img>
+    </div>
+
+    <br>
+
+
+
+
+</body>
+
+<script src = "https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous" > </script>
+
+
+<script type="text/javascript">
+
+
+
+    $("#stream-change").click(function(){
+        $('#video-id').attr('src','')
+        $('#video-id').attr('src','http://127.0.0.1:8090/camera_' + $('#c-id').val() + '.mjpeg?' + new Date().getTime())
+        var id = $('#c-id').val()
+
+
+
+        console.log(id)
+        $.ajax({
+            url: "/main/open/"+id,
+            data : '',
+            success : function(data){
+                console.log(data);
+
+
+            }
+        }).always(function() {
+
+
+            console.log('update complete');
+
+        })
+
+
+        // $("#mjpeg-id").attr("src", "http://127.0.0.1:8090/camera_" + $('#c-id').val() + '.mjpeg');
+    })
+
+    $("#stream-stop").click(function(){
+        var id = $('#c-id').val()
+        console.log(id)
+        $.ajax({
+            url: "/main/close/"+id,
+            success : function(data){
+                console.log(data);
+            }
+        }).done(function() {
+        })
+        $('#video-img').remove()
+
+    })
+
+    $("#stream-stop-all").click(function(){
+        $.ajax({
+            url: "/main/close/0",
+        }).done(function() {
+        })
+    })
+
+
+    $("#ffserver-reload").click(function(){
+        $.ajax({
+            url: "/main/ffserver/start",
+        }).done(function() {
+        })
+    })
+
+
+
+
+
+
+
+
+</script>
+
+
+
+</html>
